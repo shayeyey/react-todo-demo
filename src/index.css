@@ -11,3 +11,26 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.add_btn{
+  width: 120px;
+}
+
+/* .add_outer{
+  text-align: center;
+} */
+
+.btn{
+  margin-left: 10px;
+  margin-top: 15px;
+}
+
+.edit_btn{
+  margin-left: 10px;
+}
+
+.del_btn{
+  background-color: brown;
+  color: white;
+  border-color: transparent;
+}
