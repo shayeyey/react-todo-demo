@@ -1,3 +1,11 @@
+/*
+ * @Descripttion: 
+ * @version: 
+ * @Author: shaye
+ * @Date: 2024-05-25 17:33:39
+ * @LastEditors: shaye
+ * @LastEditTime: 2024-05-26 23:30:01
+ */
 import { useState } from "react"
 
 export default function Todo({id,name,done,toggleChecked,editNameByID,deleteTodoByID}){
@@ -19,6 +27,7 @@ export default function Todo({id,name,done,toggleChecked,editNameByID,deleteTodo
     }
 
     function save(){
+        console.log(`todo{id}`)
         editNameByID(id,newName)
         setEdit(true)
     }

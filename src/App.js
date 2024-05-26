@@ -1,86 +1,74 @@
 /*
- * @Descripttion: 
- * @version: 
+ * @Descripttion:
+ * @version:
  * @Author: shaye
  * @Date: 2024-05-25 17:19:49
  * @LastEditors: shaye
- * @LastEditTime: 2024-05-25 17:30:31
+ * @LastEditTime: 2024-05-26 23:38:09
  */
 
-import { useState } from 'react';
-import './App.css';
+import { useState } from "react";
+import "./App.css";
 import Form from "./components/Form";
-import Todo from './components/Todo';
-import { nanoid } from 'nanoid';
+import Todo from "./components/Todo";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addTodo,
+  toggleChecked,
+  editNameByID,
+  deleteTodoByID,
+} from "./store/reducer/taskReducer";
 
 function App() {
-  const [tasks, setTasks] = useState([{
-    id: '0',
-    name: 'Eat',
-    done: false
-  }, {
-    id: '1',
-    name: 'Sleep',
-    done: true
-  }, {
-    id: '2',
-    name: 'Repeat',
-    done: false
-  }])
 
-  const [filter, setFilter] = useState('All')
+  const [filter, setFilter] = useState("All");
+
+  const dispatch = useDispatch();
 
   let filterMap = {
-    'All': task => task,
-    'Active': task => task.done != true,
-    'Completed': task => task.done === true
+    All: (task) => task,
+    Active: (task) => task.done !== true,
+    Completed: (task) => task.done === true,
+  };
+
+  function addTodoFun(val) {
+    dispatch(addTodo({val}));
   }
 
-
-  function addTodo(val) {
-
-    setTasks([...tasks, {
-      id: nanoid(),
-      name: val,
-      done: false
-    }])
+  function toggleCheckedFun(id) {
+    dispatch(toggleChecked({id}));
   }
 
-  function toggleChecked(id) {
-    setTasks(tasks.map(task => {
-      if (task.id === id) {
-        task.done = !task.done
-      }
-      return task
-    }))
+  function editNameByIDFun(id, newName) {
+    dispatch(editNameByID({id, newName}));
   }
 
-  function editNameByID(id, newName) {
-    setTasks(tasks.map(task => {
-      if (task.id === id) {
-        task.name = newName
-      }
-      return task
-    }))
-  }
-
-  function deleteTodoByID(id){
-    setTasks(tasks.filter(task=>task.id!=id))
+  function deleteTodoByIDFun(id) {
+    dispatch(deleteTodoByID({id}));
   }
 
   function countByType(type) {
-    setFilter(type)
+    setFilter(type);
   }
 
-  return (
-    <div className='app'>
-      <h1>TodoMatic</h1>
-      <Form addTodo={addTodo} countByType={countByType} />
-      <h4>{tasks.filter(filterMap[filter]).length} tasks remaining</h4>
-      {tasks.filter(filterMap[filter]).map(task => 
-      <Todo key={task.id} id={task.id} name={task.name} done={task.done} toggleChecked={toggleChecked} editNameByID={editNameByID} deleteTodoByID={deleteTodoByID}>
+  const tasks = useSelector((state) => state.tasks);
 
-      </Todo>)}
+  return (
+    <div className="app">
+      <h1>TodoMatic</h1>
+      <Form addTodo={addTodoFun} countByType={countByType} />
+      <h4>{tasks.filter(filterMap[filter]).length} tasks remaining</h4>
+      {tasks.filter(filterMap[filter]).map((task) => (
+        <Todo
+          key={task.id}
+          id={task.id}
+          name={task.name}
+          done={task.done}
+          toggleChecked={toggleCheckedFun}
+          editNameByID={editNameByIDFun}
+          deleteTodoByID={deleteTodoByIDFun}
+        ></Todo>
+      ))}
     </div>
   );
 }
